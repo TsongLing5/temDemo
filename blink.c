@@ -23,7 +23,11 @@
 //#include "IIC.H"
 unsigned char MST_Data,SLV_Data;
 unsigned int temp;
-unsigned int *tmp;
+unsigned char tmp;
+unsigned char data[4];
+unsigned int tmpp,hum;
+int tmpFloat;
+unsigned char tmpDB[5],humDB[5];
 
 #define Temp_LOW 0x00
 #define Temp_HIGH 0x01
@@ -66,21 +70,72 @@ int main(void)
   initialIIC();
   LCD_P6x8Str(30,0,"2019-10-24");
   LCD_P6x8Str(30,1,"Temp:");
-  LCD_P6x8Str(60,1,"??.?C");
+  LCD_P6x8Str(60,1,"??.??C");
   LCD_P6x8Str(30,2,"Humi:");
-  LCD_P6x8Str(60,2,"??.?%");
+  LCD_P6x8Str(60,2,"??.??%");
   LCD_P6x8Str(30,6,"Hello World");
   P1OUT |=BIT0;
 
   IIC_WriteData(0x0E,0x00);
   IIC_WriteData(0x0F,0x00);
+  delay(100);delay(100);delay(100);delay(100);
   IIC_WriteData(0x0F,0x01);
-  delay(100);
-  readData(Temp_HIGH,*tmp);
-  temp=*tmp;
-  readData(Temp_LOW,*tmp);
-  temp=(temp<<8)&*tmp;
-  while (1);               // USCI_A0 TX buffer ready?
+  delay(100);delay(100);delay(100);delay(100);
+//  readData(0x01,&tmp);
+//  temp=tmp;
+//  readData(Temp_LOW,&tmp);
+  readDataNByte(0x00,data,4);
+  temp=(temp<<8)|tmp;
+  tmpp=data[0]|(data[1]<<8);
+  tmpp=(tmpp/4)-4000;
+  hum=data[2]|(data[3]<<8);
+  tmpFloat=(int)(hum*1.0/6.56);
+
+  tmpDB[0]=tmpp/1000+'0';
+  tmpDB[1]=(tmpp/100)%10+'0';
+  tmpDB[2]='.';
+  tmpDB[3]=tmpp%100/10+'0';
+  tmpDB[4]=tmpp%10+'0';
+
+  humDB[0]=(tmpFloat/1000)+'0';
+  humDB[1]=(tmpFloat/100)%10+'0';
+  humDB[2]='.';
+  humDB[3]=tmpFloat%100/10+'0';
+  humDB[4]=tmpFloat%10+'0';
+  LCD_P6x8Str(60,1,tmpDB);
+  LCD_P6x8Str(60,2,humDB);
+  while (1){               // USCI_A0 TX buffer ready?
+
+      IIC_WriteData(0x0F,0x01);
+        delay(100);delay(100);delay(100);delay(100);
+        delay(100);delay(100);delay(100);delay(100);
+        delay(100);delay(100);delay(100);delay(100);
+        delay(100);delay(100);delay(100);delay(100);
+
+      //  readData(0x01,&tmp);
+      //  temp=tmp;
+      //  readData(Temp_LOW,&tmp);
+        readDataNByte(0x00,data,4);
+        temp=(temp<<8)|tmp;
+        tmpp=data[0]|(data[1]<<8);
+        tmpp=(tmpp/4)-4000;
+        hum=data[2]|(data[3]<<8);
+        tmpFloat=(int)(hum*1.0/6.56);
+
+        tmpDB[0]=tmpp/1000+'0';
+        tmpDB[1]=(tmpp/100)%10+'0';
+        tmpDB[2]='.';
+        tmpDB[3]=tmpp%100/10+'0';
+        tmpDB[4]=tmpp%10+'0';
+
+        humDB[0]=(tmpFloat/1000)+'0';
+        humDB[1]=(tmpFloat/100)%10+'0';
+        humDB[2]='.';
+        humDB[3]=tmpFloat%100/10+'0';
+        humDB[4]=tmpFloat%10+'0';
+        LCD_P6x8Str(60,1,tmpDB);
+        LCD_P6x8Str(60,2,humDB);
+  }
 //  UCA0TXBUF = MST_Data;                     // Transmit first character
 
 //  __bis_SR_register(LPM0_bits + GIE);       // CPU off, enable interrupts

@@ -8,9 +8,10 @@
 #ifndef _IIC_H_
 #define _IIC_H_
 
-void initialIIC(void);
-unsigned int readData(unsigned char regAddress,unsigned int *data);
-unsigned int IIC_WriteData(unsigned int regAddress,unsigned int Data);
+#define uint8_t unsigned char
+//void initialIIC(void);
+//unsigned int readData(unsigned char regAddress,unsigned int *data);
+//unsigned int IIC_WriteData(unsigned int regAddress,unsigned int Data);
 
 
 
