@@ -9,6 +9,7 @@
 #define _IIC_H_
 
 #define uint8_t unsigned char
+uint8_t Addr;
 //void initialIIC(void);
 //unsigned int readData(unsigned char regAddress,unsigned int *data);
 //unsigned int IIC_WriteData(unsigned int regAddress,unsigned int Data);

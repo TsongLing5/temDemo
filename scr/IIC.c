@@ -2,6 +2,8 @@
 #include <msp430.h>
 #include "iic.h"
 //#define unsigned char uint8_t;
+//P31 SCL
+//P30 SDA
 void initialIIC(void){
 
     unsigned int i;
@@ -21,7 +23,8 @@ void initialIIC(void){
       UCB0BR0 = 12;                             // fSCL = SMCLK/12 = ~100kHz
       UCB0BR1 = 0;
       UCB0CTL0 &= ~UCSLA10;
-      UCB0I2CSA = 0x40;                         // Slave Address  //HDC2080 according to PIN ADDR ADDR=GND?1000000:1000001 //default(not connect) 80
+//      UCB0I2CSA = 0x40;                         // Slave Address  //HDC2080 according to PIN ADDR ADDR=GND?1000000:1000001 //default(not connect) 80
+//      setAddr(0x40);
       UCB0CTL1 &= ~UCSWRST;                     // Clear SW reset, resume operation
 //      UCB0IE |= UCTXIE;                         // Enable TX interrupt
 
@@ -32,7 +35,10 @@ void initialIIC(void){
 
 
 }
+void setAddr(uint8_t addr){
 
+    UCB0I2CSA = addr;
+}
 uint8_t IIC_WriteData(uint8_t regAddress,uint8_t Data){
 //    while( UCB0CTL1& UCTXSTP );
 //
