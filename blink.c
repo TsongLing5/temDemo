@@ -185,26 +185,22 @@ void FuncHDC2080(){
 
 void FuncBME280(){
     setAddr(0x76);  //0x77
-    IIC_WriteData(0xF2,0x03
-                  );
-    IIC_WriteData(0xF4,0x6F);
-//    IIC_WriteData(0xF5,0x06);
+    delay(100);
+    IIC_WriteData(0xE0,0xB6 );
+    delay(1000);
+    IIC_WriteData(0xF2,0x01 );
+    delay(100);
+    IIC_WriteData(0xF4,0x57);
+    delay(100);
+    IIC_WriteData(0xF5,0x02);
+    delay(100);
     readData(0xD0,&tmp);
 
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-    delay(100);delay(100);delay(100);delay(100);
-        delay(100);delay(100);delay(100);delay(100);
-        delay(100);delay(100);delay(100);delay(100);
-        delay(100);delay(100);delay(100);delay(100);
-
     readData(0xF3,&tmp);
-    read(0xF7,BME280Data,8);
+    while(tmp&0x04){
+        readData(0xF3,&tmp);
+    }
+    delay(100);
+    readDataNByte(0xF7,BME280Data,8);
     readData(0xF3,&tmp);
 }
