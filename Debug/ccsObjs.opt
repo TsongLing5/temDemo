@@ -1,1 +1,0 @@
-"./blink.obj" "./scr/IIC.obj" "./scr/SSD1306.obj" "../lnk_msp430f5529.cmd" -llibmath.a -llibc.a 
